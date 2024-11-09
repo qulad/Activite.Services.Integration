@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +13,7 @@
     <PackageReference Include="Convey.HTTP" Version="1.1.448" />
     <PackageReference Include="Convey.Logging" Version="1.1.448" />
     <PackageReference Include="Convey.WebApi" Version="1.1.448" />
+    <PackageReference Include="Convey.WebApi.CQRS" Version="1.1.448" />
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
   </ItemGroup>
 
