@@ -1,6 +1,9 @@
-﻿using Activite.Services.Integration.DTOs;
+﻿using Activite.Services.Integration.Commands;
+using Activite.Services.Integration.DTOs;
+using Activite.Services.Integration.Options;
 using Activite.Services.Integration.Queries;
 using Convey;
+using Convey.CQRS.Commands;
 using Convey.CQRS.Queries;
 using Convey.Discovery.Consul;
 using Convey.HTTP;
@@ -11,6 +14,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 #if DEBUG
 
@@ -23,13 +27,17 @@ var host = WebHost.CreateDefaultBuilder(args)
     {
         config.AddEnvironmentVariables();
     })
-    .ConfigureServices(services =>
+    .ConfigureServices((context, services) =>
     {
+        services.Configure<EmailVerificationOptions>(context.Configuration.GetSection(EmailVerificationOptions.EmailVerification));
+
         services
             .AddConvey()
             .AddWebApi()
             .AddHttpClient()
             .AddConsul()
+            .AddCommandHandlers()
+            .AddInMemoryCommandDispatcher()
             .AddQueryHandlers()
             .AddInMemoryQueryDispatcher()
             .Build();
@@ -40,6 +48,7 @@ var host = WebHost.CreateDefaultBuilder(args)
             .UseConvey()
             .UseDispatcherEndpoints(endpoints => endpoints
                 .Get("/ping", ctx => ctx.Response.WriteAsync("pong"))
+                .Post<SendEmailVerification>("/EmailVerification")
                 .Get<GetGoogleToken, GoogleTokenDto>("/Google/Token"));
     })
     .UseLogging()
