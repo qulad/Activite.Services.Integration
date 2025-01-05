@@ -6,7 +6,7 @@ namespace Activite.Services.Integration.Commands;
 [Contract]
 public class SendEmailVerification : ICommand
 {
-    public string Username { get; }
+    public string Username { get; set; }
 
     public string Email { get; set; }
 
